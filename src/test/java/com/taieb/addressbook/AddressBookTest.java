@@ -36,7 +36,7 @@ public class AddressBookTest {
 
     @Test
     public void addressBookReturnEmptyOldestForEmpty() {
-        assertThat( AddressBook.create().oldestPerson() , is( Optional.empty() ) );
+        assertThat( AddressBook.create().oldestPerson() , is( Lists.fixedSize.empty() ) );
     }
 
     @Test
@@ -45,7 +45,7 @@ public class AddressBookTest {
             .create()
             .with( new Person( "Jim" , Gender.Male , LocalDate.of( 1960 , 6 , 10 ) ) )
             .with( new Person( "Jerry" , Gender.Male , LocalDate.of( 1956 , 6 , 10 ) ) );
-        assertThat( ab.oldestPerson().orElseThrow( RuntimeException::new) , is(Lists.mutable.of( new Person( "Jerry" , Gender.Male , LocalDate.of( 1956 , 6 , 10 ) ) ) ) );
+        assertThat( ab.oldestPerson() , is(Lists.mutable.of( new Person( "Jerry" , Gender.Male , LocalDate.of( 1956 , 6 , 10 ) ) ) ) );
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AddressBookTest {
             .with( jim )
             .with( jerry )
             .with( edna );
-        assertThat( ab.oldestPerson().orElseThrow( RuntimeException::new) , containsInAnyOrder( jim , edna ) );
+        assertThat( ab.oldestPerson() , containsInAnyOrder( jim , edna ) );
     }
 
     @Test

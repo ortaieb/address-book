@@ -2,6 +2,7 @@ package com.taieb.addressbook;
 
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Multimaps;
 import java.time.LocalDate;
@@ -47,13 +48,13 @@ public class AddressBook {
         return genderCounter.genderCount( Gender.Female );
     }
 
-    public Optional<List<Person>> oldestPerson() {
+    public List<Person> oldestPerson() {
 
-        Optional<LocalDate> date = oldestDate();
+        final Optional<LocalDate> date = oldestDate();
 
         return date.isPresent() ?
-            Optional.of( byDate.get( date.get() ).toList() ) :
-            Optional.empty();
+            byDate.get( date.get() ).toList() :
+            Lists.fixedSize.empty();
 
     }
 
