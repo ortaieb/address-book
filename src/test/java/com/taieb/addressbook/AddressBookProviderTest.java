@@ -16,12 +16,25 @@ public class AddressBookProviderTest {
     public void parseGivenFileToAddressBook() {
 
         try {
-            AddressBook ab = AddressBookProvider.fromFile( "./src/test/resources/ab.test" );
+
+            AddressBook ab = AddressBookProvider.create().fromFile( "./src/test/resources/ab.test" );
             assertThat( ab.maleCounter() , is( 1 ) );
 
         }
         catch (IOException e) {
             fail();
         }
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void nullShouldThrowException() throws IOException {
+
+        AddressBookProvider.create().fromFile( null );
+    }
+
+    @Test( expected = IllegalArgumentException.class )
+    public void missingFileShouldThrowException() throws IOException {
+
+        AddressBookProvider.create().fromFile( "./src/test/resources/missing.file" );
     }
 }

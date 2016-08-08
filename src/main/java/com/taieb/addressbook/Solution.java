@@ -12,13 +12,13 @@ public class Solution {
     public static void main(String[] args) throws IOException {
 
         final String addressbookFile = "./src/main/resources/AddressBook";
-        final AddressBook addressBook = AddressBookProvider.fromFile( addressbookFile );
+        final AddressBook addressBook = AddressBookProvider.create().fromFile( addressbookFile );
 
         System.out.println("== How many males are in the address book? ");
         System.out.println( String.format("There are %d Males in the address book" , addressBook.maleCounter() ) );
 
         System.out.println("== Who is the oldest person in the address book? ");
-        List<Person> oldest = addressBook.oldestPerson().orElse(Lists.fixedSize.empty());
+        List<Person> oldest = addressBook.oldestPerson();
         if ( oldest.size() == 0 )
             System.out.println( "The are no old people in the address book" );
         else if( oldest.size() == 1 )

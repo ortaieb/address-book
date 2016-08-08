@@ -16,7 +16,16 @@ import java.util.stream.Stream;
  */
 public class AddressBookProvider {
 
-    public static AddressBook fromFile( String path ) throws IOException {
+    public static AddressBookProvider create() {
+        return new AddressBookProvider();
+    }
+
+    private AddressBookProvider() {}
+
+    public AddressBook fromFile( String path ) throws IOException {
+
+        if( path == null || !Files.exists(Paths.get(path)) )
+            throw new IllegalArgumentException( String.format("Could not find file in path [%s]",path) );
 
         final List<Optional<Person>> parsed = readLines( path )
             .orElseThrow( IllegalStateException::new )
@@ -26,7 +35,7 @@ public class AddressBookProvider {
         return toAddressBook( parsed );
     }
 
-    private static Optional<Stream<String>> readLines( String path ) throws IOException {
+    private Optional<Stream<String>> readLines( String path ) throws IOException {
 
         final Path parsedPath = getPath(path);
 
@@ -36,17 +45,18 @@ public class AddressBookProvider {
 
     }
 
-    private static Path getPath( String path ) {
+
+    private Path getPath( String path ) {
         return path.indexOf("classpath") == -1 ?
             fromFilepath( path ) :
             fromClasspth( path );
     }
 
-    private static Path fromFilepath( String path ) {
+    private Path fromFilepath( String path ) {
         return Paths.get( path );
     }
 
-    private static Path fromClasspth( String path ) {
+    private Path fromClasspth( String path ) {
         try {
             return Paths.get( AddressBookProvider.class.getClassLoader().getResource( path ).toURI() );
         }
@@ -55,11 +65,11 @@ public class AddressBookProvider {
         }
     }
 
-    private static boolean hasInvalidEntries( List<Optional<Person>> input ) {
+    private boolean hasInvalidEntries( List<Optional<Person>> input ) {
         return input.stream().anyMatch( p -> p.equals(Optional.empty() ) );
     }
 
-    private static AddressBook toAddressBook( List<Optional<Person>> parsed ) {
+    private AddressBook toAddressBook( List<Optional<Person>> parsed ) {
         AddressBook ab = AddressBook.create();
 
         for( Optional<Person> op : parsed ) {
